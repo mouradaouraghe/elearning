@@ -9,7 +9,7 @@ import java.math.BigDecimal;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class CourseRequestDto {
+public class CourseRequestDTO {
     @NotBlank(message = "Title is required")
     @Size(min = 5, max = 200, message = "Title must be between 5 and 200 characters")
     private String title;
