@@ -6,6 +6,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "users")
@@ -37,6 +39,8 @@ public class User {
     private LocalDateTime createdAt;
 
     private LocalDateTime updatedAt;
+    @OneToMany(mappedBy = "instructor", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Course> courses = new ArrayList<>();
 
     @PrePersist
     protected void onCreate() {
@@ -47,6 +51,15 @@ public class User {
     @PreUpdate
     protected void onUpdate() {
         updatedAt = LocalDateTime.now();
+    }
+    public void addCourse(Course course) {
+        courses.add(course);
+        course.setInstructor(this);
+    }
+
+    public void removeCourse(Course course) {
+        courses.remove(course);
+        course.setInstructor(null);
     }
 
     public Long getId() {
