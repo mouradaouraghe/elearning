@@ -9,6 +9,7 @@ import com.example.bonjour20.exception.ResourceNotFoundException;
 import com.example.bonjour20.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -24,6 +25,7 @@ public class UserImplemService implements  UserService{
     private  final UserRepository userRepository;
 
     private final UserMapper userMapper;
+    private final PasswordEncoder passwordEncoder;
 
 
     @Override
@@ -40,6 +42,8 @@ public class UserImplemService implements  UserService{
         User user = userMapper.toEntity(requestDTO);
 
         // TODO: Encoder le mot de passe
+        user.setPassword(passwordEncoder.encode(requestDTO.getPassword()));
+
 
         // Sauvegarder
         User savedUser = userRepository.save(user);
