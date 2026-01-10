@@ -14,29 +14,33 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/chapters")
-@RequiredArgsConstructor
+//@RequiredArgsConstructor
 @Slf4j
 public class ChapterController {
 
     private final ChapterService chapterService;
 
+    public ChapterController(ChapterService chapterService) {
+        this.chapterService = chapterService;
+    }
+
     @PostMapping
     public ResponseEntity<ChapterResponseDTO> createChapter(@Valid @RequestBody ChapterRequestDTO requestDTO) {
-        log.info("REST request to create chapter: {}", requestDTO.getTitle());
+        //log.info("REST request to create chapter: {}", requestDTO.getTitle());
         ChapterResponseDTO responseDTO = chapterService.createChapter(requestDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(responseDTO);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<ChapterResponseDTO> getChapterById(@PathVariable Long id) {
-        log.info("REST request to get chapter with id: {}", id);
+        //log.info("REST request to get chapter with id: {}", id);
         ChapterResponseDTO chapter = chapterService.getChapterById(id);
         return ResponseEntity.ok(chapter);
     }
 
     @GetMapping("/course/{courseId}")
     public ResponseEntity<List<ChapterResponseDTO>> getChaptersByCourse(@PathVariable Long courseId) {
-        log.info("REST request to get chapters for course: {}", courseId);
+        //log.info("REST request to get chapters for course: {}", courseId);
         List<ChapterResponseDTO> chapters = chapterService.getChaptersByCourse(courseId);
         return ResponseEntity.ok(chapters);
     }
@@ -45,14 +49,14 @@ public class ChapterController {
     public ResponseEntity<ChapterResponseDTO> updateChapter(
             @PathVariable Long id,
             @Valid @RequestBody ChapterRequestDTO requestDTO) {
-        log.info("REST request to update chapter with id: {}", id);
+        //log.info("REST request to update chapter with id: {}", id);
         ChapterResponseDTO updatedChapter = chapterService.updateChapter(id, requestDTO);
         return ResponseEntity.ok(updatedChapter);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteChapter(@PathVariable Long id) {
-        log.info("REST request to delete chapter with id: {}", id);
+        //log.info("REST request to delete chapter with id: {}", id);
         chapterService.deleteChapter(id);
         return ResponseEntity.noContent().build();
     }

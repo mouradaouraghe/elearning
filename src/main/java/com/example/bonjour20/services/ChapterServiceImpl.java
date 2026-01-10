@@ -17,18 +17,25 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-@RequiredArgsConstructor
+//@RequiredArgsConstructor
 @Slf4j
 @Transactional
 public class ChapterServiceImpl implements ChapterService {
 
     private final ChapterRepository chapterRepository;
+
+    public ChapterServiceImpl(ChapterRepository chapterRepository, CourseRepository courseRepository, ChapterMapper chapterMapper) {
+        this.chapterRepository = chapterRepository;
+        this.courseRepository = courseRepository;
+        this.chapterMapper = chapterMapper;
+    }
+
     private final CourseRepository courseRepository;
     private final ChapterMapper chapterMapper;
 
     @Override
     public ChapterResponseDTO createChapter(ChapterRequestDTO requestDTO) {
-        log.info("Creating chapter: {}", requestDTO.getTitle());
+        //log.info("Creating chapter: {}", requestDTO.getTitle());
 
         // Vérifier que le cours existe
         Course course = courseRepository.findById(requestDTO.getCourseId())
@@ -37,14 +44,14 @@ public class ChapterServiceImpl implements ChapterService {
         Chapter chapter = chapterMapper.toEntity(requestDTO, course);
         Chapter savedChapter = chapterRepository.save(chapter);
 
-        log.info("Chapter created successfully with id: {}", savedChapter.getId());
+        //log.info("Chapter created successfully with id: {}", savedChapter.getId());
         return chapterMapper.toResponseDTO(savedChapter);
     }
 
     @Override
     @Transactional(readOnly = true)
     public ChapterResponseDTO getChapterById(Long id) {
-        log.info("Fetching chapter with id: {}", id);
+        //log.info("Fetching chapter with id: {}", id);
 
         Chapter chapter = chapterRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Chapter", "id", id));
@@ -55,7 +62,7 @@ public class ChapterServiceImpl implements ChapterService {
     @Override
     @Transactional(readOnly = true)
     public List<ChapterResponseDTO> getChaptersByCourse(Long courseId) {
-        log.info("Fetching chapters for course: {}", courseId);
+        //log.info("Fetching chapters for course: {}", courseId);
 
         // Vérifier que le cours existe
         if (!courseRepository.existsById(courseId)) {
@@ -69,7 +76,7 @@ public class ChapterServiceImpl implements ChapterService {
 
     @Override
     public ChapterResponseDTO updateChapter(Long id, ChapterRequestDTO requestDTO) {
-        log.info("Updating chapter with id: {}", id);
+        //log.info("Updating chapter with id: {}", id);
 
         Chapter chapter = chapterRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Chapter", "id", id));
@@ -77,19 +84,19 @@ public class ChapterServiceImpl implements ChapterService {
         chapterMapper.updateEntityFromDTO(requestDTO, chapter);
         Chapter updatedChapter = chapterRepository.save(chapter);
 
-        log.info("Chapter updated successfully");
+        //log.info("Chapter updated successfully");
         return chapterMapper.toResponseDTO(updatedChapter);
     }
 
     @Override
     public void deleteChapter(Long id) {
-        log.info("Deleting chapter with id: {}", id);
+        //log.info("Deleting chapter with id: {}", id);
 
         if (!chapterRepository.existsById(id)) {
             throw new ResourceNotFoundException("Chapter", "id", id);
         }
 
         chapterRepository.deleteById(id);
-        log.info("Chapter deleted successfully");
+        //log.info("Chapter deleted successfully");
     }
 }

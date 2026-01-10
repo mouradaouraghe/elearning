@@ -16,11 +16,16 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import java.io.IOException;
 
 @Component
-@AllArgsConstructor
+
 @Slf4j
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private final JwtUtil jwtUtil;
     private final CustomUserDetailsService userDetailsService;
+
+    public JwtAuthenticationFilter(JwtUtil jwtUtil, CustomUserDetailsService userDetailsService) {
+        this.jwtUtil = jwtUtil;
+        this.userDetailsService = userDetailsService;
+    }
 
     @Override
     protected void doFilterInternal(
@@ -69,11 +74,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                     // 9. Définir l'utilisateur comme authentifié
                     SecurityContextHolder.getContext().setAuthentication(authToken);
 
-                    log.info("User {} authenticated successfully", userEmail);
+                    //log.info("User {} authenticated successfully", userEmail);
                 }
             }
         } catch (Exception e) {
-            log.error("Cannot set user authentication: {}", e.getMessage());
+            //log.error("Cannot set user authentication: {}", e.getMessage());
         }
 
         // 10. Continuer vers le prochain filtre

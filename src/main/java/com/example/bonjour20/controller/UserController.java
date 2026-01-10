@@ -16,12 +16,16 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/users")
 @Slf4j
-@RequiredArgsConstructor
+//@RequiredArgsConstructor
 
 public class UserController {
     private final UserImplemService userService;
 
-   @PostMapping
+    public UserController(UserImplemService userService) {
+        this.userService = userService;
+    }
+
+    @PostMapping
    public ResponseEntity<UserResponseDTO> createUser(@Valid @RequestBody UserRequestDTO requestDTO) {
        //log.info("REST request to create user: {}", requestDTO.getEmail());
        UserResponseDTO responseDTO = userService.createUser(requestDTO);

@@ -19,22 +19,30 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-@RequiredArgsConstructor
+//@RequiredArgsConstructor
 @Slf4j
 @Transactional
 public class AuthServiceImpl implements AuthService{
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+
+    public AuthServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder, JwtUtil jwtUtil, AuthenticationManager authenticationManager) {
+        this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
+        this.jwtUtil = jwtUtil;
+        this.authenticationManager = authenticationManager;
+    }
+
     private final JwtUtil jwtUtil;
     private final AuthenticationManager authenticationManager;
 
     @Override
     public AuthResponseDTO register(RegisterRequestDTO requestDTO) {
-        log.info("Registering new user with email: {}", requestDTO.getEmail());
+        //log.info("Registering new user with email: {}", requestDTO.getEmail());
 
         // Vérifier si l'email existe déjà
         if (userRepository.existsByEmail(requestDTO.getEmail())) {
-            log.error("Email already exists: {}", requestDTO.getEmail());
+            //log.error("Email already exists: {}", requestDTO.getEmail());
             throw new DuplicateResourceException("User", "email", requestDTO.getEmail());
         }
 
@@ -47,7 +55,7 @@ public class AuthServiceImpl implements AuthService{
         user.setRole(requestDTO.getRole());
 
         User savedUser = userRepository.save(user);
-        log.info("User registered successfully with id: {}", savedUser.getId());
+        //log.info("User registered successfully with id: {}", savedUser.getId());
 
         // Générer le token JWT
         CustomUserDetails userDetails = new CustomUserDetails(savedUser);
@@ -66,7 +74,7 @@ public class AuthServiceImpl implements AuthService{
 
     @Override
     public AuthResponseDTO login(LoginRequestDTO requestDTO) {
-        log.info("User attempting to login with email: {}", requestDTO.getEmail());
+        //log.info("User attempting to login with email: {}", requestDTO.getEmail());
 
         try {
             // Authentifier l'utilisateur
@@ -84,7 +92,7 @@ public class AuthServiceImpl implements AuthService{
             // Générer le token JWT
             String token = jwtUtil.generateToken(userDetails);
 
-            log.info("User logged in successfully: {}", user.getEmail());
+            //log.info("User logged in successfully: {}", user.getEmail());
 
             // Retourner la réponse
             return new AuthResponseDTO(
@@ -97,7 +105,7 @@ public class AuthServiceImpl implements AuthService{
             );
 
         } catch (BadCredentialsException e) {
-            log.error("Invalid credentials for email: {}", requestDTO.getEmail());
+            //log.error("Invalid credentials for email: {}", requestDTO.getEmail());
             throw new BadCredentialsException("Invalid email or password");
         }
     }

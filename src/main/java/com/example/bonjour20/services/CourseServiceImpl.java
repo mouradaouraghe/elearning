@@ -17,11 +17,18 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.stream.Collectors;
 @Service
-@RequiredArgsConstructor
+//@RequiredArgsConstructor
 @Slf4j
 @Transactional
 public class CourseServiceImpl implements CourService{
     private final CourseRepository courseRepository;
+
+    public CourseServiceImpl(CourseRepository courseRepository, UserRepository userRepository, CourseMapper courseMapper) {
+        this.courseRepository = courseRepository;
+        this.userRepository = userRepository;
+        this.courseMapper = courseMapper;
+    }
+
     private final UserRepository userRepository;
     private final CourseMapper courseMapper;
 

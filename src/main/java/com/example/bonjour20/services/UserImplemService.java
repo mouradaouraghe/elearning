@@ -18,11 +18,17 @@ import java.util.stream.Collectors;
 @Slf4j
 
 @Service
-@RequiredArgsConstructor
+//@RequiredArgsConstructor
 
 public class UserImplemService implements  UserService{
 
     private  final UserRepository userRepository;
+
+    public UserImplemService(UserRepository userRepository, UserMapper userMapper, PasswordEncoder passwordEncoder) {
+        this.userRepository = userRepository;
+        this.userMapper = userMapper;
+        this.passwordEncoder = passwordEncoder;
+    }
 
     private final UserMapper userMapper;
     private final PasswordEncoder passwordEncoder;

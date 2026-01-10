@@ -18,7 +18,7 @@ public class GlobalExceptionHandler {
             BadCredentialsException ex,
             WebRequest request) {
 
-        log.error("Bad credentials: {}", ex.getMessage());
+        //log.error("Bad credentials: {}", ex.getMessage());
 
         ErrorResponse error = new ErrorResponse(
                 LocalDateTime.now(),
